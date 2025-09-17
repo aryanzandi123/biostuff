@@ -1,0 +1,122 @@
+{
+  "main": "VCP",
+  "interactors": [
+    {
+      "primary": "UFD1",
+      "arrow": "activates",
+      "mechanism": "scaffolding",
+      "functions": [
+        {"function": "ERAD retrotranslocation", "arrow": "activates"},
+        {"function": "Chromatin protein extraction", "arrow": "activates"},
+        {"function": "DNA replication termination", "arrow": "activates"},
+        {"function": "Mitotic checkpoint silencing", "arrow": "activates"}
+      ]
+    },
+    {
+      "primary": "NPLOC4",
+      "arrow": "activates",
+      "mechanism": "scaffolding",
+      "functions": [
+        {"function": "ERAD retrotranslocation", "arrow": "activates"},
+        {"function": "Chromatin protein extraction", "arrow": "activates"},
+        {"function": "DNA replication termination", "arrow": "activates"},
+        {"function": "Mitotic checkpoint silencing", "arrow": "activates"}
+      ]
+    },
+    {
+      "primary": "NSFL1C",
+      "arrow": "activates",
+      "mechanism": "scaffolding",
+      "functions": [
+        {"function": "Golgi reassembly", "arrow": "activates"},
+        {"function": "Membrane fusion", "arrow": "activates"},
+        {"function": "ERAD", "arrow": "inhibits"}
+      ]
+    },
+    {
+      "primary": "UBXN1",
+      "arrow": "activates",
+      "mechanism": "scaffolding",
+      "functions": [
+        {"function": "Aggresome formation", "arrow": "activates"},
+        {"function": "Endolysosomal sorting", "arrow": "activates"},
+        {"function": "ERAD", "arrow": "unknown"}
+      ]
+    },
+    {
+      "primary": "UBXN7",
+      "arrow": "activates",
+      "mechanism": "scaffolding",
+      "functions": [
+        {"function": "CRL substrate extraction", "arrow": "activates"},
+        {"function": "Proteasomal degradation", "arrow": "activates"},
+        {"function": "DNA replication factor turnover", "arrow": "activates"}
+      ]
+    },
+    {
+      "primary": "FAF2",
+      "arrow": "activates",
+      "mechanism": "scaffolding",
+      "functions": [
+        {"function": "ERAD retrotranslocation", "arrow": "activates"},
+        {"function": "Lipid droplet metabolism", "arrow": "activates"}
+      ]
+    },
+    {
+      "primary": "SVIP",
+      "arrow": "activates",
+      "mechanism": "scaffolding",
+      "functions": [
+        {"function": "ERAD", "arrow": "inhibits"}
+      ]
+    },
+    {
+      "primary": "SELENOS",
+      "arrow": "activates",
+      "mechanism": "scaffolding",
+      "functions": [
+        {"function": "ERAD retrotranslocation", "arrow": "activates"},
+        {"function": "p97 recruitment to ER membrane", "arrow": "activates"}
+      ]
+    },
+    {
+      "primary": "ATXN3",
+      "arrow": "activates",
+      "mechanism": "recruitment",
+      "functions": [
+        {"function": "Ubiquitin chain editing", "arrow": "activates"},
+        {"function": "ERAD substrate processing", "arrow": "unknown"},
+        {"function": "Protein quality control", "arrow": "activates"}
+      ]
+    },
+    {
+      "primary": "ASPSCR1",
+      "arrow": "unknown",
+      "mechanism": "unknown",
+      "functions": [
+        {"function": "p97 hexamer disassembly", "arrow": "activates"},
+        {"function": "ERAD", "arrow": "inhibits"}
+      ]
+    },
+    {
+      "primary": "VCPIP1",
+      "arrow": "activates",
+      "mechanism": "recruitment",
+      "functions": [
+        {"function": "Ubiquitin chain editing", "arrow": "activates"},
+        {"function": "p97 complex remodeling", "arrow": "activates"},
+        {"function": "p97 deubiquitylation", "arrow": "activates"}
+      ]
+    },
+    {
+      "primary": "UBE4B",
+      "arrow": "activates",
+      "mechanism": "recruitment",
+      "functions": [
+        {"function": "Ubiquitin chain elongation", "arrow": "activates"},
+        {"function": "Proteasomal degradation", "arrow": "activates"},
+        {"function": "ERAD", "arrow": "activates"}
+      ]
+    }
+  ]
+}

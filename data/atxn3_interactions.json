@@ -1,0 +1,104 @@
+{
+  "main": "ATXN3",
+  "interactors": [
+    {
+      "primary": "VCP",
+      "arrow": "unknown",
+      "mechanism": "scaffolding",
+      "functions": []
+    },
+    {
+      "primary": "RAD23A",
+      "arrow": "unknown",
+      "mechanism": "recruitment",
+      "functions": [
+        {
+          "function": "Proteasomal substrate delivery",
+          "arrow": "activates"
+        },
+        {
+          "function": "Ubiquitin chain recognition",
+          "arrow": "activates"
+        }
+      ]
+    },
+    {
+      "primary": "RAD23B",
+      "arrow": "unknown",
+      "mechanism": "recruitment",
+      "functions": [
+        {
+          "function": "Proteasomal substrate delivery",
+          "arrow": "activates"
+        },
+        {
+          "function": "Ubiquitin chain recognition",
+          "arrow": "activates"
+        }
+      ]
+    },
+    {
+      "primary": "STUB1",
+      "arrow": "unknown",
+      "mechanism": "unknown",
+      "functions": []
+    },
+    {
+      "primary": "UBQLN1",
+      "arrow": "unknown",
+      "mechanism": "unknown",
+      "functions": []
+    },
+    {
+      "primary": "PARK2",
+      "arrow": "activates",
+      "mechanism": "deubiquitination",
+      "functions": []
+    },
+    {
+      "primary": "RNF4",
+      "arrow": "unknown",
+      "mechanism": "unknown",
+      "functions": []
+    },
+    {
+      "primary": "PSMD4",
+      "arrow": "unknown",
+      "mechanism": "recruitment",
+      "functions": [
+        {
+          "function": "Ubiquitin receptor at proteasome",
+          "arrow": "activates"
+        },
+        {
+          "function": "Proteasomal substrate docking",
+          "arrow": "activates"
+        }
+      ]
+    },
+    {
+      "primary": "HSPA8",
+      "arrow": "unknown",
+      "mechanism": "unknown",
+      "functions": []
+    },
+    {
+      "primary": "UBE3A",
+      "arrow": "unknown",
+      "mechanism": "unknown",
+      "functions": []
+    },
+    {
+      "primary": "UBE4B",
+      "arrow": "unknown",
+      "mechanism": "unknown",
+      "functions": []
+    },
+    {
+      "primary": "HTT",
+      "arrow": "unknown",
+      "mechanism": "unknown",
+      "functions": []
+    }
+  ]
+}
