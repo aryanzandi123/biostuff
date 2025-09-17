@@ -1,0 +1,234 @@
+{
+  "graph_json": {
+    "nodes": [
+      {
+        "id": "MAIN",
+        "type": "protein",
+        "label": "STMN2"
+      },
+      {
+        "id": "P::TUBA1A",
+        "type": "protein",
+        "label": "TUBA1A"
+      },
+      {
+        "id": "P::TUBB3",
+        "type": "protein",
+        "label": "TUBB3"
+      },
+      {
+        "id": "P::TUBB",
+        "type": "protein",
+        "label": "TUBB"
+      },
+      {
+        "id": "P::CDK5",
+        "type": "protein",
+        "label": "CDK5"
+      },
+      {
+        "id": "P::MAPK8",
+        "type": "protein",
+        "label": "MAPK8"
+      },
+      {
+        "id": "P::MAPK10",
+        "type": "protein",
+        "label": "MAPK10"
+      },
+      {
+        "id": "P::PRKACA",
+        "type": "protein",
+        "label": "PRKACA"
+      },
+      {
+        "id": "P::YWHAZ",
+        "type": "protein",
+        "label": "YWHAZ"
+      },
+      {
+        "id": "P::YWHAE",
+        "type": "protein",
+        "label": "YWHAE"
+      },
+      {
+        "id": "P::YWHAQ",
+        "type": "protein",
+        "label": "YWHAQ"
+      },
+      {
+        "id": "F::Microtubule assembly",
+        "type": "function",
+        "label": "Microtubule assembly"
+      },
+      {
+        "id": "F::Cytoskeleton organization",
+        "type": "function",
+        "label": "Cytoskeleton organization"
+      },
+      {
+        "id": "F::Mitotic spindle formation",
+        "type": "function",
+        "label": "Mitotic spindle formation"
+      },
+      {
+        "id": "F::Microtubule dynamics",
+        "type": "function",
+        "label": "Microtubule dynamics"
+      },
+      {
+        "id": "F::Axonal transport",
+        "type": "function",
+        "label": "Axonal transport"
+      },
+      {
+        "id": "F::Microtubule polymerization",
+        "type": "function",
+        "label": "Microtubule polymerization"
+      },
+      {
+        "id": "F::Proline-directed phosphorylation",
+        "type": "function",
+        "label": "Proline-directed phosphorylation"
+      },
+      {
+        "id": "F::Protein phosphorylation",
+        "type": "function",
+        "label": "Protein phosphorylation"
+      },
+      {
+        "id": "F::Phosphoserine/threonine binding",
+        "type": "function",
+        "label": "Phosphoserine/threonine binding"
+      }
+    ],
+    "edges": [
+      {
+        "source": "MAIN",
+        "target": "P::TUBA1A",
+        "arrow": "binds",
+        "mechanism": "sequestration"
+      },
+      {
+        "source": "MAIN",
+        "target": "P::TUBB3",
+        "arrow": "binds",
+        "mechanism": "sequestration"
+      },
+      {
+        "source": "MAIN",
+        "target": "P::TUBB",
+        "arrow": "binds",
+        "mechanism": "sequestration"
+      },
+      {
+        "source": "MAIN",
+        "target": "P::CDK5",
+        "arrow": "binds",
+        "mechanism": "binding"
+      },
+      {
+        "source": "MAIN",
+        "target": "P::MAPK8",
+        "arrow": "binds",
+        "mechanism": "binding"
+      },
+      {
+        "source": "MAIN",
+        "target": "P::MAPK10",
+        "arrow": "binds",
+        "mechanism": "binding"
+      },
+      {
+        "source": "MAIN",
+        "target": "P::PRKACA",
+        "arrow": "binds",
+        "mechanism": "binding"
+      },
+      {
+        "source": "MAIN",
+        "target": "P::YWHAZ",
+        "arrow": "binds",
+        "mechanism": "binding"
+      },
+      {
+        "source": "MAIN",
+        "target": "P::YWHAE",
+        "arrow": "binds",
+        "mechanism": "binding"
+      },
+      {
+        "source": "MAIN",
+        "target": "P::YWHAQ",
+        "arrow": "binds",
+        "mechanism": "binding"
+      },
+      {
+        "source": "P::TUBA1A",
+        "target": "F::Microtubule assembly",
+        "arrow": "inhibits"
+      },
+      {
+        "source": "P::TUBA1A",
+        "target": "F::Cytoskeleton organization",
+        "arrow": "inhibits"
+      },
+      {
+        "source": "P::TUBA1A",
+        "target": "F::Mitotic spindle formation",
+        "arrow": "inhibits"
+      },
+      {
+        "source": "P::TUBB3",
+        "target": "F::Microtubule dynamics",
+        "arrow": "inhibits"
+      },
+      {
+        "source": "P::TUBB3",
+        "target": "F::Axonal transport",
+        "arrow": "inhibits"
+      },
+      {
+        "source": "P::TUBB",
+        "target": "F::Microtubule polymerization",
+        "arrow": "inhibits"
+      },
+      {
+        "source": "P::TUBB",
+        "target": "F::Cytoskeleton organization",
+        "arrow": "inhibits"
+      },
+      {
+        "source": "P::CDK5",
+        "target": "F::Proline-directed phosphorylation",
+        "arrow": "neutral"
+      },
+      {
+        "source": "P::PRKACA",
+        "target": "F::Protein phosphorylation",
+        "arrow": "neutral"
+      },
+      {
+        "source": "P::YWHAZ",
+        "target": "F::Phosphoserine/threonine binding",
+        "arrow": "neutral"
+      },
+      {
+        "source": "P::YWHAE",
+        "target": "F::Phosphoserine/threonine binding",
+        "arrow": "neutral"
+      },
+      {
+        "source": "P::YWHAQ",
+        "target": "F::Phosphoserine/threonine binding",
+        "arrow": "neutral"
+      }
+    ]
+  },
+  "mermaid": "flowchart LR\n  MAIN[STMN2]\n  P_TUBA1A[P::TUBA1A]\n  P_TUBB3[P::TUBB3]\n  P_TUBB[P::TUBB]\n  P_CDK5[P::CDK5]\n  P_MAPK8[P::MAPK8]\n  P_MAPK10[P::MAPK10]\n  P_PRKACA[P::PRKACA]\n  P_YWHAZ[P::YWHAZ]\n  P_YWHAE[P::YWHAE]\n  P_YWHAQ[P::YWHAQ]\n\n  F_Microtubule_assembly([F::Microtubule assembly])\n  F_Cytoskeleton_organization([F::Cytoskeleton organization])\n  F_Mitotic_spindle_formation([F::Mitotic spindle formation])\n  F_Microtubule_dynamics([F::Microtubule dynamics])\n  F_Axonal_transport([F::Axonal transport])\n  F_Microtubule_polymerization([F::Microtubule polymerization])\n  F_Proline_directed_phosphorylation([F::Proline-directed phosphorylation])\n  F_Protein_phosphorylation([F::Protein phosphorylation])\n  F_Phosphoserine_threonine_binding([F::Phosphoserine/threonine binding])\n\n  MAIN --- P_TUBA1A\n  MAIN --- P_TUBB3\n  MAIN --- P_TUBB\n  MAIN --- P_CDK5\n  MAIN --- P_MAPK8\n  MAIN --- P_MAPK10\n  MAIN --- P_PRKACA\n  MAIN --- P_YWHAZ\n  MAIN --- P_YWHAE\n  MAIN --- P_YWHAQ\n\n  P_TUBA1A --| F_Microtubule_assembly\n  P_TUBA1A --| F_Cytoskeleton_organization\n  P_TUBA1A --| F_Mitotic_spindle_formation\n  P_TUBB3 --| F_Microtubule_dynamics\n  P_TUBB3 --| F_Axonal_transport\n  P_TUBB --| F_Microtubule_polymerization\n  P_TUBB --| F_Cytoskeleton_organization\n  P_CDK5 --- F_Proline_directed_phosphorylation\n  P_PRKACA --- F_Protein_phosphorylation\n  P_YWHAZ --- F_Phosphoserine_threonine_binding\n  P_YWHAE --- F_Phosphoserine_threonine_binding\n  P_YWHAQ --- F_Phosphoserine_threonine_binding",
+  "step_json": {
+    "step": "step8_graph",
+    "node_count": 20,
+    "edge_count": 22
+  }
+}
