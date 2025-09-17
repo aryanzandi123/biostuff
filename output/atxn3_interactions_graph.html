@@ -1,0 +1,321 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script>function neighbourhoodHighlight(params) {
+  // console.log("in nieghbourhoodhighlight");
+  allNodes = nodes.get({ returnType: "Object" });
+  // originalNodes = JSON.parse(JSON.stringify(allNodes));
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    highlightActive = true;
+    var i, j;
+    var selectedNode = params.nodes[0];
+    var degrees = 2;
+
+    // mark all nodes as hard to read.
+    for (let nodeId in allNodes) {
+      // nodeColors[nodeId] = allNodes[nodeId].color;
+      allNodes[nodeId].color = "rgba(200,200,200,0.5)";
+      if (allNodes[nodeId].hiddenLabel === undefined) {
+        allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+    var connectedNodes = network.getConnectedNodes(selectedNode);
+    var allConnectedNodes = [];
+
+    // get the second degree nodes
+    for (i = 1; i < degrees; i++) {
+      for (j = 0; j < connectedNodes.length; j++) {
+        allConnectedNodes = allConnectedNodes.concat(
+          network.getConnectedNodes(connectedNodes[j])
+        );
+      }
+    }
+
+    // all second degree nodes get a different color and their label back
+    for (i = 0; i < allConnectedNodes.length; i++) {
+      // allNodes[allConnectedNodes[i]].color = "pink";
+      allNodes[allConnectedNodes[i]].color = "rgba(150,150,150,0.75)";
+      if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[allConnectedNodes[i]].label =
+          allNodes[allConnectedNodes[i]].hiddenLabel;
+        allNodes[allConnectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // all first degree nodes get their own color and their label back
+    for (i = 0; i < connectedNodes.length; i++) {
+      // allNodes[connectedNodes[i]].color = undefined;
+      allNodes[connectedNodes[i]].color = nodeColors[connectedNodes[i]];
+      if (allNodes[connectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[connectedNodes[i]].label =
+          allNodes[connectedNodes[i]].hiddenLabel;
+        allNodes[connectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // the main node gets its own color and its label back.
+    // allNodes[selectedNode].color = undefined;
+    allNodes[selectedNode].color = nodeColors[selectedNode];
+    if (allNodes[selectedNode].hiddenLabel !== undefined) {
+      allNodes[selectedNode].label = allNodes[selectedNode].hiddenLabel;
+      allNodes[selectedNode].hiddenLabel = undefined;
+    }
+  } else if (highlightActive === true) {
+    // console.log("highlightActive was true");
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      // allNodes[nodeId].color = "purple";
+      allNodes[nodeId].color = nodeColors[nodeId];
+      // delete allNodes[nodeId].color;
+      if (allNodes[nodeId].hiddenLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
+        allNodes[nodeId].hiddenLabel = undefined;
+      }
+    }
+    highlightActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    // console.log("Nothing was selected");
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        // allNodes[nodeId].color = {};
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function filterHighlight(params) {
+  allNodes = nodes.get({ returnType: "Object" });
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    filterActive = true;
+    let selectedNodes = params.nodes;
+
+    // hiding all nodes and saving the label
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = true;
+      if (allNodes[nodeId].savedLabel === undefined) {
+        allNodes[nodeId].savedLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+
+    for (let i=0; i < selectedNodes.length; i++) {
+      allNodes[selectedNodes[i]].hidden = false;
+      if (allNodes[selectedNodes[i]].savedLabel !== undefined) {
+        allNodes[selectedNodes[i]].label = allNodes[selectedNodes[i]].savedLabel;
+        allNodes[selectedNodes[i]].savedLabel = undefined;
+      }
+    }
+
+  } else if (filterActive === true) {
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = false;
+      if (allNodes[nodeId].savedLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].savedLabel;
+        allNodes[nodeId].savedLabel = undefined;
+      }
+    }
+    filterActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function selectNode(nodes) {
+  network.selectNodes(nodes);
+  neighbourhoodHighlight({ nodes: nodes });
+  return nodes;
+}
+
+function selectNodes(nodes) {
+  network.selectNodes(nodes);
+  filterHighlight({nodes: nodes});
+  return nodes;
+}
+
+function highlightFilter(filter) {
+  let selectedNodes = []
+  let selectedProp = filter['property']
+  if (filter['item'] === 'node') {
+    let allNodes = nodes.get({ returnType: "Object" });
+    for (let nodeId in allNodes) {
+      if (allNodes[nodeId][selectedProp] && filter['value'].includes((allNodes[nodeId][selectedProp]).toString())) {
+        selectedNodes.push(nodeId)
+      }
+    }
+  }
+  else if (filter['item'] === 'edge'){
+    let allEdges = edges.get({returnType: 'object'});
+    // check if the selected property exists for selected edge and select the nodes connected to the edge
+    for (let edge in allEdges) {
+      if (allEdges[edge][selectedProp] && filter['value'].includes((allEdges[edge][selectedProp]).toString())) {
+        selectedNodes.push(allEdges[edge]['from'])
+        selectedNodes.push(allEdges[edge]['to'])
+      }
+    }
+  }
+  selectNodes(selectedNodes)
+}</script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+            
+            
+            
+            
+            
+
+        
+<center>
+<h1>ATXN3 interaction constellation</h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1>ATXN3 interaction constellation</h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 900px;
+                 background-color: #f4f7fb;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"borderWidth": 3, "color": {"background": "#264653", "border": "#0d1b2a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "ATXN3", "label": "ATXN3", "physics": false, "shape": "circle", "size": 58, "title": "\u003cb\u003eATXN3\u003c/b\u003e\u003cbr/\u003eQuery protein", "x": 0, "y": 0}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "VCP", "label": "VCP", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003eVCP\u003c/b\u003e\u003cbr/\u003eATXN3 modulates this interactor\u003cbr/\u003eMechanism: Scaffolding", "x": 1.9594348786357652e-14, "y": -320.0}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "RAD23A", "label": "RAD23A", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003eRAD23A\u003c/b\u003e\u003cbr/\u003eATXN3 modulates this interactor\u003cbr/\u003eMechanism: Recruitment", "x": 160.00000000000003, "y": -277.12812921102034}, {"borderWidth": 2, "color": {"background": "#e9c46a", "border": "#c59b2a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "Proteasomal substrate delivery", "label": "Proteasomal substrate delivery", "physics": false, "shape": "box", "shapeProperties": {"borderRadius": 6}, "size": 20, "title": "\u003cb\u003eProteasomal substrate delivery\u003c/b\u003e\u003cbr/\u003eRAD23A activates this function", "widthConstraint": {"maximum": 280}, "x": 194.68070645621688, "y": -599.1656052659467}, {"borderWidth": 2, "color": {"background": "#e9c46a", "border": "#c59b2a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "Ubiquitin chain recognition", "label": "Ubiquitin chain recognition", "physics": false, "shape": "box", "shapeProperties": {"borderRadius": 6}, "size": 20, "title": "\u003cb\u003eUbiquitin chain recognition\u003c/b\u003e\u003cbr/\u003eRAD23A activates this function", "widthConstraint": {"maximum": 280}, "x": 421.5522820060807, "y": -468.1812400507584}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "RAD23B", "label": "RAD23B", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003eRAD23B\u003c/b\u003e\u003cbr/\u003eATXN3 modulates this interactor\u003cbr/\u003eMechanism: Recruitment", "x": 277.1281292110204, "y": -159.99999999999997}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "STUB1", "label": "STUB1", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003eSTUB1\u003c/b\u003e\u003cbr/\u003eATXN3 modulates this interactor", "x": 320.0, "y": 0.0}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "UBQLN1", "label": "UBQLN1", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003eUBQLN1\u003c/b\u003e\u003cbr/\u003eATXN3 modulates this interactor", "x": 277.1281292110204, "y": 159.99999999999997}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "PARK2", "label": "PARK2", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003ePARK2\u003c/b\u003e\u003cbr/\u003eATXN3 activates this interactor\u003cbr/\u003eMechanism: Deubiquitination", "x": 160.00000000000003, "y": 277.12812921102034}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "RNF4", "label": "RNF4", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003eRNF4\u003c/b\u003e\u003cbr/\u003eATXN3 modulates this interactor", "x": 1.9594348786357652e-14, "y": 320.0}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "PSMD4", "label": "PSMD4", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003ePSMD4\u003c/b\u003e\u003cbr/\u003eATXN3 modulates this interactor\u003cbr/\u003eMechanism: Recruitment", "x": -159.99999999999994, "y": 277.1281292110204}, {"borderWidth": 2, "color": {"background": "#e9c46a", "border": "#c59b2a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "Ubiquitin receptor at proteasome", "label": "Ubiquitin receptor at proteasome", "physics": false, "shape": "box", "shapeProperties": {"borderRadius": 6}, "size": 20, "title": "\u003cb\u003eUbiquitin receptor at proteasome\u003c/b\u003e\u003cbr/\u003ePSMD4 activates this function", "widthConstraint": {"maximum": 280}, "x": -194.68070645621683, "y": 599.1656052659469}, {"borderWidth": 2, "color": {"background": "#e9c46a", "border": "#c59b2a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "Proteasomal substrate docking", "label": "Proteasomal substrate docking", "physics": false, "shape": "box", "shapeProperties": {"borderRadius": 6}, "size": 20, "title": "\u003cb\u003eProteasomal substrate docking\u003c/b\u003e\u003cbr/\u003ePSMD4 activates this function", "widthConstraint": {"maximum": 280}, "x": -421.5522820060807, "y": 468.1812400507584}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "HSPA8", "label": "HSPA8", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003eHSPA8\u003c/b\u003e\u003cbr/\u003eATXN3 modulates this interactor", "x": -277.1281292110204, "y": 159.99999999999997}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "UBE3A", "label": "UBE3A", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003eUBE3A\u003c/b\u003e\u003cbr/\u003eATXN3 modulates this interactor", "x": -320.0, "y": 3.9188697572715304e-14}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "UBE4B", "label": "UBE4B", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003eUBE4B\u003c/b\u003e\u003cbr/\u003eATXN3 modulates this interactor", "x": -277.12812921102034, "y": -160.00000000000003}, {"borderWidth": 2, "color": {"background": "#2a9d8f", "border": "#1b7f6a"}, "fixed": {"x": true, "y": true}, "font": {"color": "#1c1c1c"}, "id": "HTT", "label": "HTT", "physics": false, "shape": "circle", "size": 34, "title": "\u003cb\u003eHTT\u003c/b\u003e\u003cbr/\u003eATXN3 modulates this interactor", "x": -160.00000000000014, "y": -277.1281292110203}]);
+                  edges = new vis.DataSet([{"arrows": {"to": {"enabled": true, "scaleFactor": 0.75, "type": "circle"}}, "color": "#8d99ae", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "-----\n[Scaffolding]", "title": "\u003cb\u003eATXN3\u003c/b\u003e modulates \u003cb\u003eVCP\u003c/b\u003e\u003cbr/\u003e\u003cspan style=\u0027color:#4a4a4a\u0027\u003eMechanism: Scaffolding\u003c/span\u003e", "to": "VCP", "width": 4}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.75, "type": "circle"}}, "color": "#8d99ae", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "-----\n[Recruitment]", "title": "\u003cb\u003eATXN3\u003c/b\u003e modulates \u003cb\u003eRAD23A\u003c/b\u003e\u003cbr/\u003e\u003cspan style=\u0027color:#4a4a4a\u0027\u003eMechanism: Recruitment\u003c/span\u003e", "to": "RAD23A", "width": 4}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.9, "type": "arrow"}}, "color": "#2a9d8f", "font": {"color": "#2f2f2f", "face": "Inter", "size": 18}, "from": "RAD23A", "label": "---\u003e", "smooth": {"roundness": 0.15, "type": "curvedCCW"}, "title": "\u003cb\u003eRAD23A\u003c/b\u003e activates \u003cb\u003eProteasomal substrate delivery\u003c/b\u003e", "to": "Proteasomal substrate delivery", "width": 3}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.9, "type": "arrow"}}, "color": "#2a9d8f", "font": {"color": "#2f2f2f", "face": "Inter", "size": 18}, "from": "RAD23A", "label": "---\u003e", "smooth": {"roundness": 0.15, "type": "curvedCW"}, "title": "\u003cb\u003eRAD23A\u003c/b\u003e activates \u003cb\u003eUbiquitin chain recognition\u003c/b\u003e", "to": "Ubiquitin chain recognition", "width": 3}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.75, "type": "circle"}}, "color": "#8d99ae", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "-----\n[Recruitment]", "title": "\u003cb\u003eATXN3\u003c/b\u003e modulates \u003cb\u003eRAD23B\u003c/b\u003e\u003cbr/\u003e\u003cspan style=\u0027color:#4a4a4a\u0027\u003eMechanism: Recruitment\u003c/span\u003e", "to": "RAD23B", "width": 4}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.9, "type": "arrow"}}, "color": "#2a9d8f", "font": {"color": "#2f2f2f", "face": "Inter", "size": 18}, "from": "RAD23B", "label": "---\u003e", "smooth": {"roundness": 0.15, "type": "curvedCCW"}, "title": "\u003cb\u003eRAD23B\u003c/b\u003e activates \u003cb\u003eProteasomal substrate delivery\u003c/b\u003e", "to": "Proteasomal substrate delivery", "width": 3}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.9, "type": "arrow"}}, "color": "#2a9d8f", "font": {"color": "#2f2f2f", "face": "Inter", "size": 18}, "from": "RAD23B", "label": "---\u003e", "smooth": {"roundness": 0.15, "type": "curvedCW"}, "title": "\u003cb\u003eRAD23B\u003c/b\u003e activates \u003cb\u003eUbiquitin chain recognition\u003c/b\u003e", "to": "Ubiquitin chain recognition", "width": 3}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.75, "type": "circle"}}, "color": "#8d99ae", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "-----", "title": "\u003cb\u003eATXN3\u003c/b\u003e modulates \u003cb\u003eSTUB1\u003c/b\u003e", "to": "STUB1", "width": 4}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.75, "type": "circle"}}, "color": "#8d99ae", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "-----", "title": "\u003cb\u003eATXN3\u003c/b\u003e modulates \u003cb\u003eUBQLN1\u003c/b\u003e", "to": "UBQLN1", "width": 4}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.9, "type": "arrow"}}, "color": "#2a9d8f", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "---\u003e\n[Deubiquitination]", "title": "\u003cb\u003eATXN3\u003c/b\u003e activates \u003cb\u003ePARK2\u003c/b\u003e\u003cbr/\u003e\u003cspan style=\u0027color:#4a4a4a\u0027\u003eMechanism: Deubiquitination\u003c/span\u003e", "to": "PARK2", "width": 4}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.75, "type": "circle"}}, "color": "#8d99ae", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "-----", "title": "\u003cb\u003eATXN3\u003c/b\u003e modulates \u003cb\u003eRNF4\u003c/b\u003e", "to": "RNF4", "width": 4}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.75, "type": "circle"}}, "color": "#8d99ae", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "-----\n[Recruitment]", "title": "\u003cb\u003eATXN3\u003c/b\u003e modulates \u003cb\u003ePSMD4\u003c/b\u003e\u003cbr/\u003e\u003cspan style=\u0027color:#4a4a4a\u0027\u003eMechanism: Recruitment\u003c/span\u003e", "to": "PSMD4", "width": 4}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.9, "type": "arrow"}}, "color": "#2a9d8f", "font": {"color": "#2f2f2f", "face": "Inter", "size": 18}, "from": "PSMD4", "label": "---\u003e", "smooth": {"roundness": 0.15, "type": "curvedCCW"}, "title": "\u003cb\u003ePSMD4\u003c/b\u003e activates \u003cb\u003eUbiquitin receptor at proteasome\u003c/b\u003e", "to": "Ubiquitin receptor at proteasome", "width": 3}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.9, "type": "arrow"}}, "color": "#2a9d8f", "font": {"color": "#2f2f2f", "face": "Inter", "size": 18}, "from": "PSMD4", "label": "---\u003e", "smooth": {"roundness": 0.15, "type": "curvedCW"}, "title": "\u003cb\u003ePSMD4\u003c/b\u003e activates \u003cb\u003eProteasomal substrate docking\u003c/b\u003e", "to": "Proteasomal substrate docking", "width": 3}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.75, "type": "circle"}}, "color": "#8d99ae", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "-----", "title": "\u003cb\u003eATXN3\u003c/b\u003e modulates \u003cb\u003eHSPA8\u003c/b\u003e", "to": "HSPA8", "width": 4}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.75, "type": "circle"}}, "color": "#8d99ae", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "-----", "title": "\u003cb\u003eATXN3\u003c/b\u003e modulates \u003cb\u003eUBE3A\u003c/b\u003e", "to": "UBE3A", "width": 4}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.75, "type": "circle"}}, "color": "#8d99ae", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "-----", "title": "\u003cb\u003eATXN3\u003c/b\u003e modulates \u003cb\u003eUBE4B\u003c/b\u003e", "to": "UBE4B", "width": 4}, {"arrows": {"to": {"enabled": true, "scaleFactor": 0.75, "type": "circle"}}, "color": "#8d99ae", "font": {"color": "#2f2f2f", "face": "Inter", "size": 20}, "from": "ATXN3", "label": "-----", "title": "\u003cb\u003eATXN3\u003c/b\u003e modulates \u003cb\u003eHTT\u003c/b\u003e", "to": "HTT", "width": 4}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"interaction": {"hover": true, "tooltipDelay": 150, "dragNodes": false, "multiselect": false, "zoomView": true}, "layout": {"improvedLayout": false}, "nodes": {"shadow": {"enabled": true, "size": 18, "x": 0, "y": 3}}, "edges": {"shadow": {"enabled": true, "size": 8, "x": 0, "y": 0}, "smooth": false, "selectionWidth": 2}, "physics": {"enabled": false}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

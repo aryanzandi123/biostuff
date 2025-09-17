@@ -2,31 +2,42 @@
 
 This repository includes utilities for visualising protein interaction pathways.
 
-## VCP interaction graph
+## Interactive interaction graphs
 
-The file [`data/vcp_interactions.json`](data/vcp_interactions.json) describes the
-VCP (p97) interaction network, including the primary interactors and their
-relevant downstream functions.
+The script [`generate_interaction_graph.py`](generate_interaction_graph.py)
+transforms curated JSON summaries into polished, radial pathway maps. Each
+graph is rendered as an interactive HTML file that can be opened directly in a
+browser for panning, zooming, node highlighting and tooltip inspection.
 
-Run the script below to generate an interactive, publication-ready pathway
-visualisation that follows the requested arrow conventions (`--->` for
-activation, `---|` for inhibition and `-----` for unknown/neutral effects). The
-VCP → interactor edges also annotate the interaction mechanism underneath the
-arrow label when the JSON provides one.
+Key styling details:
+
+* The query protein sits in the centre, with primary interactors forming the
+  inner ring and functional outcomes gracefully fanning outwards.
+* Edge colours and arrow heads reinforce the requested semantics (`--->`
+  activators, `---|` inhibitors and `-----` unknown effects). Query → interactor
+  edges additionally display the high-level mechanism underneath the arrow when
+  it is provided in the JSON.
+* Gentle shadows, curated colour palettes and curved connections keep the graph
+  legible even for dense neighbourhoods.
+
+### Usage
 
 ```bash
 pip install -r requirements.txt
-python generate_vcp_graph.py --input data/vcp_interactions.json --output output/vcp_interactions_graph.html
+
+# VCP (p97) network
+python generate_interaction_graph.py \
+  --input data/vcp_interactions.json \
+  --output output/vcp_interactions_graph.html \
+  --title "VCP signalling landscape"
+
+# ATXN3 network
+python generate_interaction_graph.py \
+  --input data/atxn3_interactions.json \
+  --output output/atxn3_interactions_graph.html \
+  --title "ATXN3 interaction constellation"
 ```
 
-Open the resulting HTML file (`output/vcp_interactions_graph.html`) in a web
-browser to explore the graph. Nodes are grouped into three tiers:
-
-1. The query protein (VCP) in blue on the left.
-2. Primary interactors in orange in the middle.
-3. Functional outcomes in green on the right.
-
-Edge colours reinforce the arrow semantics (green for activation, red for
-inhibition and grey for unknown). Tooltips on nodes describe their roles, and
-the hierarchical left-to-right layout keeps the pathway structure easy to read
-while still allowing you to pan and zoom for closer inspection.
+Both resulting HTML files live in the `output/` directory. Open them in any
+modern browser to explore the network; the visual remains completely
+self-contained and requires no additional build tooling.
